@@ -1,14 +1,14 @@
 ## Exercise 12.51 – Wolf (New Animal Type)
 
 ### Overview
-For this extension of the predator-prey simulation, a new animal type called Wolf was added to the system. The wolf acts as a top-level predator and interacts with both foxes and rabbits.
+For this extension of the predator-prey simulation, a new animal type called Wolf was added to the system. The wolf acts as a top-level predator and interacts with both foxes and rabbits, introducing a third level to the ecosystem.
 
 ---
 
 ### Changes Made
 
 - Created a new class `Wolf` that extends `Animal`
-- Implemented custom behaviour for movement, breeding, aging, and eating
+- Implemented custom behaviour for movement, breeding, ageing, and eating
 - Wolves can eat both foxes and rabbits
 - Wolves were added to the simulation population during initialization in `Simulator`
 - A new probability constant was added to control wolf spawning
@@ -45,6 +45,12 @@ The following assumptions were made when designing the wolf:
 - Fox population is also reduced due to wolf predation
 - The ecosystem becomes more dynamic and less stable
 - Population cycles become more complex compared to the original model
+
+---
+
+### Design Notes (OOP Extension)
+
+The addition of the Wolf class demonstrates the benefit of object-oriented design. By extending the existing Animal superclass, shared behaviour such as ageing and breeding is reused, while species-specific behaviour is defined in subclasses. This allows the simulation to be extended without modifying existing animal implementations.
 
 ---
 

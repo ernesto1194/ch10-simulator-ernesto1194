@@ -2,10 +2,12 @@ import java.util.List;
 
 public abstract class Animal
 {
+    // basic state of the animal
     private boolean alive;
     private Field field;
     private Location location;
 
+    // age of the animal
     private int age;
 
     public Animal(Field field, Location location)
@@ -52,7 +54,9 @@ public abstract class Animal
         return field;
     }
 
-    //  AGE 
+    // 
+    // AGE (shared behaviour for all animals)
+    // 
 
     protected int getAge()
     {
@@ -74,21 +78,22 @@ public abstract class Animal
         }
     }
 
-    //  BREEDING 
+    //
+    // BREEDING (shared logic, species rules differ)
+    // 
 
     protected abstract int getBreedingAge();
 
     protected boolean canBreed()
     {
-        return getAge() >= getBreedingAge();
+        return age >= getBreedingAge();
     }
 
     protected abstract int breed();
 
     protected abstract Animal createChild(boolean randomAge, Field field, Location location);
 
-    //  MOVED METHOD 
-
+    // moved method from subclasses
     protected void giveBirth(List<Animal> newAnimals)
     {
         List<Location> free = getField().getFreeAdjacentLocations(getLocation());
