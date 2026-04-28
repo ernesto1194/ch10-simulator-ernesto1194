@@ -20,7 +20,7 @@ public class Rabbit extends Animal
             setAge(0);
         }
     }
-    
+
     public void act(List<Animal> newRabbits)
     {
         incrementAge();
@@ -39,26 +39,10 @@ public class Rabbit extends Animal
         }
     }
 
-    private void giveBirth(List<Animal> newRabbits)
+    @Override
+    protected int getMaxAge()
     {
-        Field field = getField();
-        List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
-
-        for(int b = 0; b < births && free.size() > 0; b++) {
-            Location loc = free.remove(0);
-            Rabbit young = new Rabbit(false, field, loc);
-            newRabbits.add(young);
-        }
-    }
-
-    private int breed()
-    {
-        int births = 0;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
+        return MAX_AGE;
     }
 
     @Override
@@ -68,8 +52,18 @@ public class Rabbit extends Animal
     }
 
     @Override
-    protected int getMaxAge()
+    protected int breed()
     {
-        return MAX_AGE;
+        int births = 0;
+        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
+            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
+        }
+        return births;
+    }
+
+    @Override
+    protected Animal createChild(boolean randomAge, Field field, Location location)
+    {
+        return new Rabbit(randomAge, field, location);
     }
 }

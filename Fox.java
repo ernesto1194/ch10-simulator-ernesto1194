@@ -10,7 +10,7 @@ public class Fox extends Animal
     private static final int MAX_LITTER_SIZE = 2;
     private static final int RABBIT_FOOD_VALUE = 9;
     private static final Random rand = Randomizer.getRandom();
-    
+
     private int foodLevel;
 
     public Fox(boolean randomAge, Field field, Location location)
@@ -26,7 +26,7 @@ public class Fox extends Animal
             foodLevel = RABBIT_FOOD_VALUE;
         }
     }
-    
+
     public void act(List<Animal> newFoxes)
     {
         incrementAge();
@@ -59,13 +59,12 @@ public class Fox extends Animal
 
     private Location findFood()
     {
-        Field field = getField();
-        List<Location> adjacent = field.adjacentLocations(getLocation());
+        List<Location> adjacent = getField().adjacentLocations(getLocation());
         Iterator<Location> it = adjacent.iterator();
 
         while(it.hasNext()) {
             Location where = it.next();
-            Object animal = field.getObjectAt(where);
+            Object animal = getField().getObjectAt(where);
 
             if(animal instanceof Rabbit) {
                 Rabbit rabbit = (Rabbit) animal;
@@ -79,26 +78,10 @@ public class Fox extends Animal
         return null;
     }
 
-    private void giveBirth(List<Animal> newFoxes)
+    @Override
+    protected int getMaxAge()
     {
-        Field field = getField();
-        List<Location> free = field.getFreeAdjacentLocations(getLocation());
-        int births = breed();
-
-        for(int b = 0; b < births && free.size() > 0; b++) {
-            Location loc = free.remove(0);
-            Fox young = new Fox(false, field, loc);
-            newFoxes.add(young);
-        }
-    }
-
-    private int breed()
-    {
-        int births = 0;
-        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
-            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
-        }
-        return births;
+        return MAX_AGE;
     }
 
     @Override
@@ -108,8 +91,18 @@ public class Fox extends Animal
     }
 
     @Override
-    protected int getMaxAge()
+    protected int breed()
     {
-        return MAX_AGE;
+        int births = 0;
+        if(canBreed() && rand.nextDouble() <= BREEDING_PROBABILITY) {
+            births = rand.nextInt(MAX_LITTER_SIZE) + 1;
+        }
+        return births;
+    }
+
+    @Override
+    protected Animal createChild(boolean randomAge, Field field, Location location)
+    {
+        return new Fox(randomAge, field, location);
     }
 }
