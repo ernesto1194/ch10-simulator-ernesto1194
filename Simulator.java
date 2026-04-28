@@ -22,6 +22,8 @@ public class Simulator
     private static final double FOX_CREATION_PROBABILITY = 0.02;
     // The probability that a rabbit will be created in any given grid position.
     private static final double RABBIT_CREATION_PROBABILITY = 0.08;    
+    // The probability that a wolf will be created in any given grid position.
+    private static final double WOLF_CREATION_PROBABILITY = 0.015;
 
     // List of animals in the field.
     private List<Animal> animals;
@@ -61,6 +63,7 @@ public class Simulator
         view = new SimulatorView(depth, width);
         view.setColor(Rabbit.class, Color.ORANGE);
         view.setColor(Fox.class, Color.BLUE);
+        view.setColor(Wolf.class, Color.DARK_GRAY);
         
         // Setup a valid starting point.
         reset();
@@ -84,14 +87,12 @@ public class Simulator
     {
         for(int step = 1; step <= numSteps && view.isViable(field); step++) {
             simulateOneStep();
-            // delay(60);   // uncomment this to run more slowly
         }
     }
     
     /**
      * Run the simulation from its current state for a single step.
-     * Iterate over the whole field updating the state of each
-     * fox and rabbit.
+     * Iterate over the whole field updating the state of each animal.
      */
     public void simulateOneStep()
     {
@@ -99,16 +100,18 @@ public class Simulator
 
         // Provide space for newborn animals.
         List<Animal> newAnimals = new ArrayList<>();        
-        // Let all rabbits act.
+
+        // Let all animals act.
         for(Iterator<Animal> it = animals.iterator(); it.hasNext(); ) {
             Animal animal = it.next();
             animal.act(newAnimals);
-            if(! animal.isAlive()) {
+
+            if(!animal.isAlive()) {
                 it.remove();
             }
         }
                
-        // Add the newly born foxes and rabbits to the main lists.
+        // Add the newly born animals to the main list.
         animals.addAll(newAnimals);
 
         view.showStatus(step, field);
@@ -128,23 +131,27 @@ public class Simulator
     }
     
     /**
-     * Randomly populate the field with foxes and rabbits.
+     * Randomly populate the field with foxes, rabbits and wolves.
      */
     private void populate()
     {
         Random rand = Randomizer.getRandom();
         field.clear();
+
         for(int row = 0; row < field.getDepth(); row++) {
             for(int col = 0; col < field.getWidth(); col++) {
-                if(rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Fox fox = new Fox(true, field, location);
-                    animals.add(fox);
+
+                Location location = new Location(row, col);
+                double chance = rand.nextDouble();
+
+                if(chance <= FOX_CREATION_PROBABILITY) {
+                    animals.add(new Fox(true, field, location));
                 }
-                else if(rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Location location = new Location(row, col);
-                    Rabbit rabbit = new Rabbit(true, field, location);
-                    animals.add(rabbit);
+                else if(chance <= FOX_CREATION_PROBABILITY + RABBIT_CREATION_PROBABILITY) {
+                    animals.add(new Rabbit(true, field, location));
+                }
+                else if(chance <= FOX_CREATION_PROBABILITY + RABBIT_CREATION_PROBABILITY + WOLF_CREATION_PROBABILITY) {
+                    animals.add(new Wolf(true, field, location));
                 }
                 // else leave the location empty.
             }
