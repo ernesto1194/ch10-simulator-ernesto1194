@@ -8,10 +8,11 @@ public class Rabbit extends Animal
     private static final double BREEDING_PROBABILITY = 0.12;
     private static final int MAX_LITTER_SIZE = 4;
     private static final Random rand = Randomizer.getRandom();
-    
+
     public Rabbit(boolean randomAge, Field field, Location location)
     {
         super(field, location);
+
         if(randomAge) {
             setAge(rand.nextInt(MAX_AGE));
         }
@@ -24,12 +25,9 @@ public class Rabbit extends Animal
     {
         incrementAge();
 
-        if(getAge() > MAX_AGE) {
-            setDead();
-        }
-
         if(isAlive()) {
-            giveBirth(newRabbits);            
+            giveBirth(newRabbits);
+
             Location newLocation = getField().freeAdjacentLocation(getLocation());
 
             if(newLocation != null) {
@@ -53,7 +51,7 @@ public class Rabbit extends Animal
             newRabbits.add(young);
         }
     }
-        
+
     private int breed()
     {
         int births = 0;
@@ -63,9 +61,15 @@ public class Rabbit extends Animal
         return births;
     }
 
-    // (replaces old canBreed)
+    @Override
     protected int getBreedingAge()
     {
         return BREEDING_AGE;
+    }
+
+    @Override
+    protected int getMaxAge()
+    {
+        return MAX_AGE;
     }
 }

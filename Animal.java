@@ -16,7 +16,7 @@ public abstract class Animal
         age = 0;
     }
     
-    abstract public void act(List<Animal> newAnimals);
+    public abstract void act(List<Animal> newAnimals);
 
     protected boolean isAlive()
     {
@@ -52,7 +52,8 @@ public abstract class Animal
         return field;
     }
 
-    // AGE METHODS
+    // AGE HANDLING 
+
     protected int getAge()
     {
         return age;
@@ -63,17 +64,22 @@ public abstract class Animal
         this.age = age;
     }
 
+    protected abstract int getMaxAge();
+
     protected void incrementAge()
     {
         age++;
+        if(age > getMaxAge()) {
+            setDead();
+        }
     }
 
-    // shared breeding logic
+    // BREEDING 
+
+    protected abstract int getBreedingAge();
+
     protected boolean canBreed()
     {
         return getAge() >= getBreedingAge();
     }
-
-    // subclasses must define this
-    protected abstract int getBreedingAge();
 }

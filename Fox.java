@@ -16,6 +16,7 @@ public class Fox extends Animal
     public Fox(boolean randomAge, Field field, Location location)
     {
         super(field, location);
+
         if(randomAge) {
             setAge(rand.nextInt(MAX_AGE));
             foodLevel = rand.nextInt(RABBIT_FOOD_VALUE);
@@ -31,14 +32,11 @@ public class Fox extends Animal
         incrementAge();
         incrementHunger();
 
-        if(getAge() > MAX_AGE) {
-            setDead();
-        }
-
         if(isAlive()) {
-            giveBirth(newFoxes);            
+            giveBirth(newFoxes);
+
             Location newLocation = findFood();
-            if(newLocation == null) { 
+            if(newLocation == null) {
                 newLocation = getField().freeAdjacentLocation(getLocation());
             }
 
@@ -58,7 +56,7 @@ public class Fox extends Animal
             setDead();
         }
     }
-    
+
     private Location findFood()
     {
         Field field = getField();
@@ -71,7 +69,7 @@ public class Fox extends Animal
 
             if(animal instanceof Rabbit) {
                 Rabbit rabbit = (Rabbit) animal;
-                if(rabbit.isAlive()) { 
+                if(rabbit.isAlive()) {
                     rabbit.setDead();
                     foodLevel = RABBIT_FOOD_VALUE;
                     return where;
@@ -80,7 +78,7 @@ public class Fox extends Animal
         }
         return null;
     }
-    
+
     private void giveBirth(List<Animal> newFoxes)
     {
         Field field = getField();
@@ -93,7 +91,7 @@ public class Fox extends Animal
             newFoxes.add(young);
         }
     }
-        
+
     private int breed()
     {
         int births = 0;
@@ -103,9 +101,15 @@ public class Fox extends Animal
         return births;
     }
 
-    // (replaces old canBreed)
+    @Override
     protected int getBreedingAge()
     {
         return BREEDING_AGE;
+    }
+
+    @Override
+    protected int getMaxAge()
+    {
+        return MAX_AGE;
     }
 }
