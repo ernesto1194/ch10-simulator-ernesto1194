@@ -1,20 +1,11 @@
 import java.util.List;
 
-/**
- * A class representing shared characteristics of animals.
- * 
- * Now includes age handling for all animals.
- * 
- * @author David J. Barnes and Michael Kölling
- * @version 2016.02.29 (2)
- */
 public abstract class Animal
 {
     private boolean alive;
     private Field field;
     private Location location;
 
-    // NEW: shared age field
     private int age;
 
     public Animal(Field field, Location location)
@@ -61,7 +52,7 @@ public abstract class Animal
         return field;
     }
 
-    // NEW METHODS FOR AGE
+    // AGE METHODS
     protected int getAge()
     {
         return age;
@@ -76,4 +67,13 @@ public abstract class Animal
     {
         age++;
     }
+
+    // shared breeding logic
+    protected boolean canBreed()
+    {
+        return getAge() >= getBreedingAge();
+    }
+
+    // subclasses must define this
+    protected abstract int getBreedingAge();
 }

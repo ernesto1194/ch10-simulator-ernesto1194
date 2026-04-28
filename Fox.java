@@ -31,7 +31,6 @@ public class Fox extends Animal
         incrementAge();
         incrementHunger();
 
-        // IMPORTANT: check death from age
         if(getAge() > MAX_AGE) {
             setDead();
         }
@@ -104,8 +103,9 @@ public class Fox extends Animal
         return births;
     }
 
-    private boolean canBreed()
+    // (replaces old canBreed)
+    protected int getBreedingAge()
     {
-        return getAge() >= BREEDING_AGE;
+        return BREEDING_AGE;
     }
 }

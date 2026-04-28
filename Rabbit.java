@@ -24,7 +24,6 @@ public class Rabbit extends Animal
     {
         incrementAge();
 
-        // IMPORTANT: check death from age
         if(getAge() > MAX_AGE) {
             setDead();
         }
@@ -64,8 +63,9 @@ public class Rabbit extends Animal
         return births;
     }
 
-    private boolean canBreed()
+    // (replaces old canBreed)
+    protected int getBreedingAge()
     {
-        return getAge() >= BREEDING_AGE;
+        return BREEDING_AGE;
     }
 }
